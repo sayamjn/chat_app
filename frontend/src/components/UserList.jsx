@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCircle } from 'react-icons/fa';
 
-const UserList = ({ users, onUserSelect, selectedUser, onlineUsers }) => {
+const UserList = ({ users, onUserSelect, selectedUser, onlineUsers, darkMode }) => {
   if (!users?.length) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 p-6">
@@ -16,7 +16,7 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers }) => {
 
   return (
     <div className="overflow-y-auto h-full pb-6">
-      <h2 className="font-bold text-lg px-6 pt-6 pb-3 border-b border-gray-200 dark:border-dark-600">
+      <h2 className="font-bold text-lg px-6 pt-6 pb-3 border-b border-gray-200 dark:border-gray-700 dark:text-white">
         Contacts
       </h2>
       <ul className="space-y-1 mt-3">
@@ -29,12 +29,12 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers }) => {
             onClick={() => onUserSelect(user)}
             className={`px-6 py-3 cursor-pointer transition-all duration-200 flex items-center gap-3 ${
               selectedUser?._id === user._id
-                ? 'bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border-l-4 border-primary-500'
-                : 'hover:bg-gray-100 dark:hover:bg-dark-700'
+                ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-l-4 border-blue-500'
+                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div className="absolute -bottom-1 -right-1">
@@ -48,7 +48,7 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers }) => {
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">{user.username}</p>
+              <p className="font-medium truncate dark:text-white">{user.username}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {onlineUsers.includes(user._id) ? 'Online' : 'Offline'}
               </p>

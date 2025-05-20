@@ -1,7 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const MessageBubble = ({ message, currentUserId }) => {
+const MessageBubble = ({ message, currentUserId, darkMode }) => {
+  if (!message || !message.sender || !message.sender._id) {
+    console.error('Invalid message structure:', message);
+    return null;
+  }
+  
   const isSentByCurrentUser = message.sender._id === currentUserId;
   
   return (
@@ -14,8 +19,8 @@ const MessageBubble = ({ message, currentUserId }) => {
       <div
         className={`max-w-[70%] ${
           isSentByCurrentUser
-            ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-tl-2xl rounded-tr-sm rounded-bl-2xl ml-auto'
-            : 'bg-white dark:bg-dark-600 shadow-sm rounded-tr-2xl rounded-tl-sm rounded-br-2xl border border-gray-200 dark:border-dark-700'
+            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-tl-2xl rounded-tr-sm rounded-bl-2xl ml-auto'
+            : 'bg-white dark:bg-gray-800 dark:text-white shadow-sm rounded-tr-2xl rounded-tl-sm rounded-br-2xl border border-gray-200 dark:border-gray-700'
         } px-4 py-3 shadow-sm`}
       >
         {!isSentByCurrentUser && (
@@ -26,7 +31,7 @@ const MessageBubble = ({ message, currentUserId }) => {
         <div className="break-words">{message.content}</div>
         <div
           className={`text-xs mt-1 text-right ${
-            isSentByCurrentUser ? 'text-primary-100' : 'text-gray-500 dark:text-gray-400'
+            isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
           }`}
         >
           {new Date(message.createdAt).toLocaleTimeString([], {

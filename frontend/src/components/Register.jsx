@@ -15,13 +15,11 @@ const Register = () => {
     e.preventDefault();
     setError('');
     
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
     
-    // Validate password length
     if (password.length < 6) {
       setError('Password must be at least 6 characters long');
       return;
