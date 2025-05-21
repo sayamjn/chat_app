@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCircle } from 'react-icons/fa';
 
-const UserList = ({ users, onUserSelect, selectedUser, onlineUsers, darkMode }) => {
+const UserList = ({ users, onUserSelect, selectedUser, onlineUsers }) => {
   if (!users?.length) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 p-6">
+      <div className="h-full flex flex-col items-center justify-center text-gray-500 p-6">
         <div className="text-center">
           <p className="text-lg mb-2">No users available</p>
           <p className="text-sm">Waiting for others to join</p>
@@ -16,7 +16,7 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers, darkMode }) 
 
   return (
     <div className="overflow-y-auto h-full pb-6">
-      <h2 className="font-bold text-lg px-6 pt-6 pb-3 border-b border-gray-200 dark:border-gray-700 dark:text-white">
+      <h2 className="font-bold text-lg px-6 pt-6 pb-3 border-b border-gray-200">
         Contacts
       </h2>
       <ul className="space-y-1 mt-3">
@@ -29,8 +29,8 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers, darkMode }) 
             onClick={() => onUserSelect(user)}
             className={`px-6 py-3 cursor-pointer transition-all duration-200 flex items-center gap-3 ${
               selectedUser?._id === user._id
-                ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-l-4 border-blue-500'
-                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500'
+                : 'hover:bg-gray-100'
             }`}
           >
             <div className="relative">
@@ -48,8 +48,8 @@ const UserList = ({ users, onUserSelect, selectedUser, onlineUsers, darkMode }) 
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate dark:text-white">{user.username}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="font-medium truncate">{user.username}</p>
+              <p className="text-xs text-gray-500">
                 {onlineUsers.includes(user._id) ? 'Online' : 'Offline'}
               </p>
             </div>

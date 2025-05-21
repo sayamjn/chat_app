@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { FaSignOutAlt, FaPaperPlane, FaChevronLeft, FaUsers, FaCircle, FaMoon, FaSun } from 'react-icons/fa';
+import { FaSignOutAlt, FaPaperPlane, FaChevronLeft, FaUsers, FaCircle } from 'react-icons/fa';
 import AuthContext from '../context/AuthContext';
 import UserList from './UserList';
 import MessageBubble from './MessageBubble';
@@ -21,21 +21,7 @@ const ChatWindow = () => {
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   const [showUserList, setShowUserList] = useState(true);
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches);
   const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('darkMode', darkMode);
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -241,29 +227,22 @@ const ChatWindow = () => {
   };
 
   return (
-    <div className={`h-screen flex flex-col ${darkMode ? 'dark' : ''} bg-gray-50 dark:bg-gray-900`}>
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm z-10">
+    <div className="h-screen flex flex-col bg-gray-50">
+      <div className="bg-white border-b border-gray-200 shadow-sm z-10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
             ChatterBox
           </h1>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={toggleDarkMode}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
-              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {darkMode ? <FaSun /> : <FaMoon />}
-            </button>
             <div className="flex items-center">
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
                 {user?.username?.charAt(0).toUpperCase()}
               </div>
-              <span className="ml-2 font-medium hidden sm:inline dark:text-white">{user?.username}</span>
+              <span className="ml-2 font-medium hidden sm:inline">{user?.username}</span>
             </div>
             <button 
               onClick={handleLogout}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 text-gray-600 transition-colors"
               aria-label="Logout"
             >
               <FaSignOutAlt />
@@ -286,16 +265,16 @@ const ChatWindow = () => {
           className={`${
             showUserList ? 'block' : 'hidden'
           } ${
-            isMobileView ? 'fixed inset-0 z-20 bg-white dark:bg-gray-900' : 'w-80'
-          } border-r border-gray-200 dark:border-gray-700`}
+            isMobileView ? 'fixed inset-0 z-20 bg-white' : 'w-80'
+          } border-r border-gray-200`}
           initial={isMobileView ? { x: -300 } : false}
           animate={isMobileView ? { x: 0 } : false}
           transition={{ type: 'tween' }}
         >
           {isMobileView && (
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-              <h2 className="font-bold dark:text-white">Contacts</h2>
-              <button onClick={toggleUserList} className="p-2 dark:text-white">
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="font-bold">Contacts</h2>
+              <button onClick={toggleUserList} className="p-2">
                 <FaChevronLeft />
               </button>
             </div>
@@ -305,16 +284,15 @@ const ChatWindow = () => {
             onUserSelect={handleUserSelect}
             selectedUser={selectedUser}
             onlineUsers={onlineUsers}
-            darkMode={darkMode}
           />
         </motion.div>
 
         <div className={`flex-1 flex flex-col ${!showUserList || !isMobileView ? 'block' : 'hidden'}`}>
           {selectedUser ? (
             <>
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center">
+              <div className="p-4 border-b border-gray-200 bg-white flex items-center">
                 {isMobileView && (
-                  <button onClick={toggleUserList} className="mr-3 dark:text-white">
+                  <button onClick={toggleUserList} className="mr-3">
                     <FaChevronLeft />
                   </button>
                 )}
@@ -334,15 +312,15 @@ const ChatWindow = () => {
                     </div>
                   </div>
                   <div className="ml-3">
-                    <h2 className="font-semibold dark:text-white">{selectedUser.username}</h2>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <h2 className="font-semibold">{selectedUser.username}</h2>
+                    <p className="text-xs text-gray-500">
                       {onlineUsers.includes(selectedUser._id) ? 'Online' : 'Offline'}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+              <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
                 {error && (
                   <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
                     <p>{error}</p>
@@ -350,12 +328,12 @@ const ChatWindow = () => {
                 )}
 
                 {messages.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                    <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                  <div className="h-full flex flex-col items-center justify-center text-gray-500">
+                    <div className="text-center p-6 bg-white rounded-lg shadow-sm">
                       <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
                         <FaPaperPlane className="text-white text-xl" />
                       </div>
-                      <h3 className="text-lg font-semibold mb-2 dark:text-white">No messages yet</h3>
+                      <h3 className="text-lg font-semibold mb-2">No messages yet</h3>
                       <p>Send a message to start the conversation with {selectedUser.username}</p>
                     </div>
                   </div>
@@ -366,20 +344,18 @@ const ChatWindow = () => {
                         key={message._id}
                         message={message}
                         currentUserId={user._id}
-                        darkMode={darkMode}
                       />
                     ))}
                     <TypingIndicator
                       isTyping={isTyping}
                       username={selectedUser.username}
-                      darkMode={darkMode}
                     />
                     <div ref={messagesEndRef} />
                   </div>
                 )}
               </div>
 
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <div className="p-4 border-t border-gray-200 bg-white">
                 <form onSubmit={handleSendMessage} className="flex">
                   <input
                     type="text"
@@ -391,7 +367,7 @@ const ChatWindow = () => {
                         : `${selectedUser.username} is offline`
                     }
                     disabled={!onlineUsers.includes(selectedUser._id)}
-                    className="flex-1 py-3 px-4 rounded-l-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-500"
+                    className="flex-1 py-3 px-4 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
                   />
                   <button
                     type="submit"
@@ -405,12 +381,12 @@ const ChatWindow = () => {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center p-6">
-              <div className="text-center max-w-md p-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+              <div className="text-center max-w-md p-8 bg-white rounded-xl shadow-sm">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
                   <FaUsers className="text-white text-2xl" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-white">Welcome to ChatterBox!</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                <h2 className="text-2xl font-bold mb-2 text-gray-800">Welcome to ChatterBox!</h2>
+                <p className="text-gray-600 mb-6">
                   Select a user from the contacts list to start chatting.
                 </p>
                 {isMobileView && (

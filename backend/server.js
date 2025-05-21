@@ -23,7 +23,11 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('MongoDB Connection Error:', err));
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  credentials: true
+}));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
