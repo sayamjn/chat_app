@@ -38,7 +38,6 @@ const activeUsers = new Map();
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  // User joins (comes online)
   socket.on('join', ({ userId }) => {
     activeUsers.set(userId, socket.id);
     console.log(`User ${userId} is now online`);
